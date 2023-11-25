@@ -114,7 +114,8 @@ public class Main {
 
                         System.out.println("1. Add tickets to order\n2. Delete tickets from order\n3. Cancel Order");
                         selection = scnr.nextInt();
-                        updateOrderSwitch(selection,userKey,users,selectedOrder,Auditoriums,scnr);
+                        updateOrderSwitch(selection,userKey,users,selectedOrder,Auditoriums,scnr,listOfOrders);
+                        continue;
                         
                     case 4:
                         System.out.println("Auditorium "+ users.get(userKey)[2]+", "+ users.get(userKey)[1]+"\n"+users.get(userKey)[3]+" adult, "+users.get(userKey)[4]+" child, "+users.get(userKey)[5]+" senior");
@@ -508,9 +509,8 @@ public class Main {
         }
         return "";
     }
-    public static void updateOrderSwitch(int selection, String userKey, HashMap<String,String[]> users,int selectedOrder,Auditorium Auditoriums[], Scanner scnr)
+    public static void updateOrderSwitch(int selection, String userKey, HashMap<String,String[]> users,int selectedOrder,Auditorium Auditoriums[], Scanner scnr, String[] listOfOrders)
     {
-        String[] listOfOrders=users.get(userKey)[1].split("/");
         String[] listofAdults=users.get(userKey)[3].split("/");
         String[] listofChilds=users.get(userKey)[4].split("/");
         String[] listofSeniors=users.get(userKey)[5].split("/");
@@ -519,11 +519,28 @@ public class Main {
             
             case 1:
                 System.out.println("1. Auditorium 1\n2. Auditorium 2\n3. Auditorium 3");
-                        selection = scnr.nextInt();
-                        if (users.get(userKey)[1]==null||users.get(userKey)[1].compareTo(", ")==0)
-                        {
+                    selection = scnr.nextInt();
+                        //if (users.get(userKey)[1]==null||users.get(userKey)[1].compareTo(", ")==0)
+                        //{
                             listOfOrders[selectedOrder-1]=listOfOrders[selectedOrder-1]+","+reserveTicketsString(Auditoriums[selection-1], scnr,users, userKey);
-                        }
+                            System.out.println(listOfOrders[selectedOrder-1]);
+                        //}
+                String output ="";
+                for (int i =0; i<listOfOrders.length;i++)
+                {
+                    output=output+listOfOrders[i]+"/";
+                }
+                String[] temp = users.get(userKey);
+                temp[1]=output.substring(0,output.length()-1);
+                //temp[2]=temp[2].substring(0,temp[2].length()-1);
+                temp[3]=temp[3].substring(0,temp[3].lastIndexOf("/"));
+                temp[4]=temp[4].substring(0,temp[4].lastIndexOf("/"));
+                temp[5]=temp[5].substring(0,temp[5].lastIndexOf("/"));
+                for (int i = 0 ; i< temp.length;i++)
+                {
+                    System.out.println(temp[i]);
+                }
+                users.put(userKey,temp);
                 return;
             case 2:
                 return;
