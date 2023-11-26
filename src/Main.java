@@ -150,6 +150,7 @@ public class Main {
                             orderTotal=0;
                         }
                         System.out.println("Customer Total: $"+runninTotal+"\n");
+                        //hi
                         //System.out.println()
                         continue;
                     case 5:
