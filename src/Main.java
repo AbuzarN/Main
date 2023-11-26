@@ -552,9 +552,10 @@ public class Main {
             
             case 1:
                 System.out.println("1. Auditorium 1\n2. Auditorium 2\n3. Auditorium 3");
-                selection = scnr.nextInt();
+                selection=Integer.parseInt(""+users.get(userKey)[2].charAt(selection-1));
+                //selection = scnr.nextInt();
                 listOfOrders[selectedOrder-1]=listOfOrders[selectedOrder-1]+","+reserveTicketsString(Auditoriums[selection-1], scnr,users, userKey);
-                System.out.println(listOfOrders[selectedOrder-1]);
+                //System.out.println(listOfOrders[selectedOrder-1]);
                 String output ="";
                 for (int i =0; i<listOfOrders.length;i++)
                 {
@@ -578,8 +579,7 @@ public class Main {
                 temp[3]=adultString.substring(0,adultString.length()-1);
                 temp[4]=childString.substring(0,childString.length()-1);
                 temp[5]=senriorString.substring(0,senriorString.length()-1);
-                for (int i = 0 ; i< temp.length;i++)
-                { System.out.println(temp[i]);}
+                //for (int i = 0 ; i< temp.length;i++){ System.out.println(temp[i]);}
                 users.put(userKey,temp);
                 return;
             case 2:
