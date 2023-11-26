@@ -131,8 +131,27 @@ public class Main {
                         continue;
                         
                     case 4:
-                        System.out.println("Auditorium "+ users.get(userKey)[2]+", "+ users.get(userKey)[1]+"\n"+users.get(userKey)[3]+" adult, "+users.get(userKey)[4]+" child, "+users.get(userKey)[5]+" senior");
+                        double runninTotal=0;
+                        double orderTotal=0;
+                        listOfOrders=users.get(userKey)[1].split("/");
+                        for (int i =0; i<listOfOrders.length;i++)
+                        {
+                            listOfOrders[i] = removeDashes(listOfOrders[i]);
+                        }
+                        listofAdults=users.get(userKey)[3].split("/");
+                        listofChilds=users.get(userKey)[4].split("/");
+                        listofSeniors=users.get(userKey)[5].split("/");
+                        for (int i=0; i<users.get(userKey)[2].length();i++)
+                        {
+                            System.out.println("Auditorium "+ users.get(userKey)[2].charAt(i)+", "+ listOfOrders[i]+"\n"+listofAdults[i+1]+" adult, "+listofChilds[i+1]+" child, "+listofSeniors[i+1]+" senior");
+                            orderTotal=Integer.parseInt(listofAdults[i+1])*10.0+Integer.parseInt(listofChilds[i+1])*5.0+Integer.parseInt(listofSeniors[i+1])*7.50;
+                            runninTotal+=orderTotal;
+                            System.out.println("Order Total: $"+runninTotal+"\n");
+                            orderTotal=0;
+                        }
+                        System.out.println("Customer Total: $"+runninTotal+"\n");
                         //System.out.println()
+                        continue;
                     case 5:
                         System.out.println("Logging out");
                         scnr.nextLine();
@@ -532,9 +551,10 @@ public class Main {
             
             case 1:
                 System.out.println("1. Auditorium 1\n2. Auditorium 2\n3. Auditorium 3");
-                selection = scnr.nextInt();
+                selection=Integer.parseInt(""+users.get(userKey)[2].charAt(selection-1));
+                //selection = scnr.nextInt();
                 listOfOrders[selectedOrder-1]=listOfOrders[selectedOrder-1]+","+reserveTicketsString(Auditoriums[selection-1], scnr,users, userKey);
-                System.out.println(listOfOrders[selectedOrder-1]);
+                //System.out.println(listOfOrders[selectedOrder-1]);
                 String output ="";
                 for (int i =0; i<listOfOrders.length;i++)
                 {
@@ -558,8 +578,7 @@ public class Main {
                 temp[3]=adultString.substring(0,adultString.length()-1);
                 temp[4]=childString.substring(0,childString.length()-1);
                 temp[5]=senriorString.substring(0,senriorString.length()-1);
-                for (int i = 0 ; i< temp.length;i++)
-                { System.out.println(temp[i]);}
+                //for (int i = 0 ; i< temp.length;i++){ System.out.println(temp[i]);}
                 users.put(userKey,temp);
                 return;
             case 2:
