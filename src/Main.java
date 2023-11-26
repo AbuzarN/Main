@@ -146,7 +146,7 @@ public class Main {
                             System.out.println("Auditorium "+ users.get(userKey)[2].charAt(i)+", "+ listOfOrders[i]+"\n"+listofAdults[i+1]+" adult, "+listofChilds[i+1]+" child, "+listofSeniors[i+1]+" senior");
                             orderTotal=Integer.parseInt(listofAdults[i+1])*10.0+Integer.parseInt(listofChilds[i+1])*5.0+Integer.parseInt(listofSeniors[i+1])*7.50;
                             runninTotal+=orderTotal;
-                            System.out.println("Order Total: $"+runninTotal+"\n");
+                            System.out.println("Order Total: $"+orderTotal+"\n");
                             orderTotal=0;
                         }
                         System.out.println("Customer Total: $"+runninTotal+"\n");
