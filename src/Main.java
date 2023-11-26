@@ -131,8 +131,28 @@ public class Main {
                         continue;
                         
                     case 4:
-                        System.out.println("Auditorium "+ users.get(userKey)[2]+", "+ users.get(userKey)[1]+"\n"+users.get(userKey)[3]+" adult, "+users.get(userKey)[4]+" child, "+users.get(userKey)[5]+" senior");
+                        double runninTotal=0;
+                        double orderTotal=0;
+                        listOfOrders=users.get(userKey)[1].split("/");
+                        for (int i =0; i<listOfOrders.length;i++)
+                        {
+                            listOfOrders[i] = removeDashes(listOfOrders[i]);
+                        }
+                        listofAdults=users.get(userKey)[3].split("/");
+                        listofChilds=users.get(userKey)[4].split("/");
+                        listofSeniors=users.get(userKey)[5].split("/");
+                        for (int i=0; i<users.get(userKey)[2].length();i++)
+                        {
+                            System.out.println("Auditorium "+ users.get(userKey)[2].charAt(i)+", "+ listOfOrders[i]+"\n"+listofAdults[i+1]+" adult, "+listofChilds[i+1]+" child, "+listofSeniors[i+1]+" senior");
+                            orderTotal=Integer.parseInt(listofAdults[i+1])*10.0+Integer.parseInt(listofChilds[i+1])*5.0+Integer.parseInt(listofSeniors[i+1])*7.50;
+                            runninTotal+=orderTotal;
+                            System.out.println("Order Total: $"+runninTotal+"\n");
+                            orderTotal=0;
+                        }
+                        System.out.println("Customer Total: $"+runninTotal+"\n");
+                        //hi
                         //System.out.println()
+                        continue;
                     case 5:
                         System.out.println("Logging out");
                         scnr.nextLine();
