@@ -235,6 +235,24 @@ public class Auditorium {
         }
 
     }
+    public void UnReserveSeats (int R, int C)
+    {
+        Node currNode = First;
+
+        for (int i = 1; i<R; i++)
+        {
+            currNode=currNode.getDown();
+        }
+        for (int i = 0; i< C; i++)
+        {
+            currNode=currNode.getNext();
+        };
+        currNode.getPayload().setTicketType('.');
+        currNode=currNode.getNext();
+
+        
+
+    }
     //An update to the states (Traversal and count through the LL)
     public void UpdateStats()
     {
