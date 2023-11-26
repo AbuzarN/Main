@@ -583,6 +583,7 @@ public class Main {
                 users.put(userKey,temp);
                 return;
             case 2:
+                Auditoriums[0].UnReserveSeats(0,0);
                 return;
             case 3:
                 return;
