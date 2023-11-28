@@ -553,9 +553,9 @@ public class Main {
         String senriorString="";
         String[] temp = null;
         String output="";
+        String[] listOfSeats= listOfOrders[selectedOrder-1].split(",");
         switch(selection)
         {
-            
             case 1:
                 System.out.println("1. Auditorium 1\n2. Auditorium 2\n3. Auditorium 3");
                 selection=Integer.parseInt(""+users.get(userKey)[2].charAt(selection-1));
@@ -589,15 +589,16 @@ public class Main {
                 users.put(userKey,temp);
                 return;
             case 2:
-                scnr.nextLine();
-                String[] tempListOfOrders = new String[listOfOrders.length];
-                for (int i=0; i<tempListOfOrders.length;i++)
+                String[] tempListOfOrders = removeDashes(listOfOrders[selectedOrder-1]).split(",");
+                for (int i =0; i<tempListOfOrders.length;i++)
                 {
-                    tempListOfOrders[i]=removeDashes(listOfOrders[i]);
+                    System.out.println(tempListOfOrders[i]);
                 }
                 System.out.println("Which seat?");
+                scnr.nextLine();
                 String seat = scnr.nextLine();
                 int found =-1;
+                
                 for (int i =0; i<tempListOfOrders.length;i++)
                 {
                     if (tempListOfOrders[i].compareTo(seat)==0)
@@ -614,40 +615,105 @@ public class Main {
                 {
                     selection=Integer.parseInt(""+users.get(userKey)[2].charAt(selection-2));
                     Auditoriums[selection-1].UnReserveSeats(Integer.parseInt(""+seat.charAt(0))-1, (int)(seat.charAt(1)-65));
-                    adultString ="";
-                    childString="";
-                    senriorString="";
-                    output ="";
-                    temp = users.get(userKey);
-                    listOfOrders[found]="";
-                    for (int i=0; i<listOfOrders.length;i++)
+                    tempListOfOrders[found]="";
+                }
+                output="";
+                adultString ="";
+                childString="";
+                senriorString="";
+                //System.out.println("selectedOrder"+selectedOrder);
+                for (int j=0; j<listOfOrders.length;j++)
+                {
+                    if(j==selectedOrder-1)
                     {
-                        System.out.println(listOfOrders[i]+" "+selectedOrder);
-                        if (i!=selectedOrder)
+                        for (int i =0; i<listOfSeats.length;i++)
                         {
-                            output=output+listOfOrders[i]+"/";
-                            adultString=adultString+listofAdults[i]+"/";
-                            childString=childString+listofChilds[i]+"/";
-                            senriorString=senriorString+listofSeniors[i]+"/";
+                            if(i!=found)
+                            {
+                                output+=listOfSeats[i]+",";
+                            }
                         }
-                    }
-                    if (output.length()==0)
-                    {
-                        temp[1]=null;
+                        if (output.length()!=0)
+                        {
+                            output=output.substring(0, output.length()-1)+"/";
+                        }
                     }
                     else
                     {
-                        temp[1]=output.substring(0,output.length()-1);
+                        output+=listOfOrders[j]+"/";
                     }
-                    temp[2]=temp[2].substring(0,temp[2].length()-1);
-                    temp[3]=adultString.substring(0,adultString.length()-1);
-                    temp[4]=childString.substring(0,childString.length()-1);
-                    temp[5]=senriorString.substring(0,senriorString.length()-1);
-                    for (int i = 0 ; i< temp.length;i++){ System.out.println(temp[i]);}
-
-                //for (int i = 0 ; i< temp.length;i++){ System.out.println(temp[i]);}
-                    users.put(userKey,temp);
+                    
                 }
+                //System.out.println(output);
+                switch (listOfSeats[found].charAt(listOfSeats[found].length()-1))
+                {
+                    case 'A':
+                        //System.out.print("A");
+                        for (int i =0; i<listofAdults.length;i++){System.out.println(listofAdults[selectedOrder]);}
+                        listofAdults[selectedOrder]=""+(Integer.parseInt(listofAdults[selectedOrder])-1);
+                        break;
+                    case 'S':
+                        //System.out.print("S");
+                        listofSeniors[selectedOrder]=""+(Integer.parseInt(listofSeniors[selectedOrder])-1);
+                        break;
+                    case 'C': 
+                        listofChilds[selectedOrder]=""+(Integer.parseInt(listofChilds[selectedOrder])-1);
+                        //System.out.print("C");
+                        break;
+                }
+                for (int i =0; i< listofAdults.length;i++)
+                {
+                    adultString+=listofAdults[i]+"/";
+                    childString+=listofChilds[i]+"/";
+                    senriorString+=listofSeniors[i]+"/";
+                }
+                temp = users.get(userKey);
+                for (int i=0; i< temp.length;i++){System.out.println(temp[i]);}
+                System.out.println("____");
+
+                if ((listofAdults[selectedOrder]+listofChilds[selectedOrder]+listofSeniors[selectedOrder]).compareTo("000")==0)
+                {
+                    for (int i=3; i<temp.length; i++)
+                    {
+                        if (i!=2)
+                        {
+                            temp[i]=null+"/";
+                        }
+                        
+                    }
+                    temp[1]="";
+                    System.out.println("There is an order to be removed");
+                    for (int i =0; i<listOfOrders.length;i++)
+                    {
+                        if(i!=selectedOrder-1)
+                        {
+                            temp[1]=temp[1]+listOfOrders[i]+"/";
+                            temp[3]=temp[3]+listofAdults[i+1]+"/";
+                            temp[4]=temp[4]+listofChilds[i+1]+"/";
+                            temp[5]=temp[5]+listofSeniors[i+1]+"/";
+                            
+                        }
+                    }
+                    temp[2]=temp[2].substring(0,selectedOrder-1)+temp[2].substring(selectedOrder);
+                    if (temp[1].compareTo("")==0)
+                    {
+                        temp= new String[]{null,null,null,null,null,null};
+                    }
+                    users.put(userKey,temp);
+                    for (int i=0; i< temp.length;i++){System.out.println(temp[i]);}
+
+                    return;
+                }
+
+
+
+                temp[1]=output.substring(0,output.length()-1);
+                //temp[2]=temp[2].substring(0,temp[2].length()-1);
+                temp[3]=adultString.substring(0,adultString.length()-1);
+                temp[4]=childString.substring(0,childString.length()-1);
+                temp[5]=senriorString.substring(0,senriorString.length()-1);
+                //for (int i=0; i< temp.length;i++){System.out.println(temp[i]);}
+                users.put(userKey,temp);
                 return;
             case 3:
                 return;
