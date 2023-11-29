@@ -605,8 +605,8 @@ public class Main {
                 tempListOfOrders = removeDashes(listOfOrders[selectedOrder-1]).split(",");
                 for (int i =tempListOfOrders.length-1; i>=0;i--)
                 {
-                    System.out.print(i);
-                    System.out.print(tempListOfOrders[i]);
+                    //System.out.print(i);
+                    //System.out.print(tempListOfOrders[i]);
                     if (tempListOfOrders[i]!=null)
                     {
                         removeseat(listOfOrders, selectedOrder, scnr, selection, Auditoriums, userKey, users, tempListOfOrders[i]);
@@ -657,7 +657,7 @@ public class Main {
                 }
                 else
                 {
-                    System.out.println("selection:"+selection+"\n"+users.get(userKey)[2]+"selectedOrder"+selectedOrder);
+                    //System.out.println("selection:"+selection+"\n"+users.get(userKey)[2]+"selectedOrder"+selectedOrder);
                     selection=Integer.parseInt(""+users.get(userKey)[2].charAt(selectedOrder-1));
                     Auditoriums[selection-1].UnReserveSeats(Integer.parseInt(""+seat.charAt(0))-1, (int)(seat.charAt(1)-65));
                     tempListOfOrders[found]="";
@@ -694,7 +694,7 @@ public class Main {
                 {
                     case 'A':
                         //System.out.print("A");
-                        for (int i =0; i<listofAdults.length;i++){System.out.println(listofAdults[selectedOrder]);}
+                        //for (int i =0; i<listofAdults.length;i++){System.out.println(listofAdults[selectedOrder]);}
                         listofAdults[selectedOrder]=""+(Integer.parseInt(listofAdults[selectedOrder])-1);
                         break;
                     case 'S':
@@ -713,8 +713,8 @@ public class Main {
                     senriorString+=listofSeniors[i]+"/";
                 }
                 temp = users.get(userKey);
-                for (int i=0; i< temp.length;i++){System.out.println(temp[i]);}
-                System.out.println("____");
+                //for (int i=0; i< temp.length;i++){System.out.println(temp[i]);}
+                //System.out.println("____");
 
                 if ((listofAdults[selectedOrder]+listofChilds[selectedOrder]+listofSeniors[selectedOrder]).compareTo("000")==0)
                 {
@@ -739,14 +739,25 @@ public class Main {
                             
                         }
                     }
+                    if (temp[1].length()>0)
+                    {
+                        if (temp[1].charAt(temp[1].length()-1)=='/')
+                        {
+                            temp[1]=temp[1].substring(0,temp[1].length()-1);
+                            temp[3]=temp[3].substring(0,temp[3].length()-1);
+                            temp[4]=temp[4].substring(0,temp[4].length()-1);
+                            temp[5]=temp[5].substring(0,temp[5].length()-1);
+                        }
+                    }
+                    
                     temp[2]=temp[2].substring(0,selectedOrder-1)+temp[2].substring(selectedOrder);
                     if (temp[1].compareTo("")==0)
                     {
                         temp= new String[]{users.get(userKey)[0],null,null,null,null,null};
                     }
                     users.put(userKey,temp);
-                    for (int i=0; i< temp.length;i++){System.out.println(temp[i]);}
-
+                    //for (int i=0; i< temp.length;i++){System.out.println(temp[i]);}
+                    System.out.println("Ticekt removed");
                     return;
                 }
 
@@ -757,8 +768,9 @@ public class Main {
                 temp[3]=adultString.substring(0,adultString.length()-1);
                 temp[4]=childString.substring(0,childString.length()-1);
                 temp[5]=senriorString.substring(0,senriorString.length()-1);
-                for (int i=0; i< temp.length;i++){System.out.println(temp[i]);}
+                //for (int i=0; i< temp.length;i++){System.out.println(temp[i]);}
                 users.put(userKey,temp);
+                System.out.println("Ticekt removed");
                 return;
     }
 }
