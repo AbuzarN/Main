@@ -553,7 +553,8 @@ public class Main {
         String senriorString="";
         String[] temp = null;
         String output="";
-        String[] listOfSeats= listOfOrders[selectedOrder-1].split(",");
+        String[] tempListOfOrders=null;
+        //String[] listOfSeats= listOfOrders[selectedOrder-1].split(",");
         switch(selection)
         {
             case 1:
@@ -589,7 +590,8 @@ public class Main {
                 users.put(userKey,temp);
                 return;
             case 2:
-                String[] tempListOfOrders = removeDashes(listOfOrders[selectedOrder-1]).split(",");
+                tempListOfOrders = removeDashes(listOfOrders[selectedOrder-1]).split(",");
+
                 for (int i =0; i<tempListOfOrders.length;i++)
                 {
                     System.out.println(tempListOfOrders[i]);
@@ -597,6 +599,47 @@ public class Main {
                 System.out.println("Which seat?");
                 scnr.nextLine();
                 String seat = scnr.nextLine();
+                removeseat(listOfOrders, selectedOrder, scnr, selection, Auditoriums, userKey, users, seat);
+                return;
+            case 3:
+                tempListOfOrders = removeDashes(listOfOrders[selectedOrder-1]).split(",");
+                for (int i =tempListOfOrders.length-1; i>=0;i--)
+                {
+                    System.out.print(i);
+                    System.out.print(tempListOfOrders[i]);
+                    if (tempListOfOrders[i]!=null)
+                    {
+                        removeseat(listOfOrders, selectedOrder, scnr, selection, Auditoriums, userKey, users, tempListOfOrders[i]);
+
+                    }
+                }
+                return;
+        }
+    }
+    public static String removeDashes(String s)
+    {
+        return s.replaceAll("-\\w","");
+    }
+    public static void removeseat(String[] listOfOrders, int selectedOrder, Scanner scnr, int selection, Auditorium[] Auditoriums,String userKey, HashMap<String,String[]> users, String seat)
+    {
+        String[] tempListOfOrders = removeDashes(listOfOrders[selectedOrder-1]).split(",");
+        String[] listofAdults=users.get(userKey)[3].split("/");
+        String[] listofChilds=users.get(userKey)[4].split("/");
+        String[] listofSeniors=users.get(userKey)[5].split("/");
+        String adultString ="";
+        String childString="";
+        String senriorString="";
+        String[] temp = null;
+        String output="";
+        String[] listOfSeats= listOfOrders[selectedOrder-1].split(",");
+        /* 
+                for (int i =0; i<tempListOfOrders.length;i++)
+                {
+                    System.out.println(tempListOfOrders[i]);
+                }
+                System.out.println("Which seat?");
+                scnr.nextLine();
+                String seat = scnr.nextLine();*/
                 int found =-1;
                 
                 for (int i =0; i<tempListOfOrders.length;i++)
@@ -610,10 +653,12 @@ public class Main {
                 if (found==-1)
                 {
                     System.out.println("Seat not in Order");
+                    return;
                 }
                 else
                 {
-                    selection=Integer.parseInt(""+users.get(userKey)[2].charAt(selection-2));
+                    System.out.println("selection:"+selection+"\n"+users.get(userKey)[2]+"selectedOrder"+selectedOrder);
+                    selection=Integer.parseInt(""+users.get(userKey)[2].charAt(selectedOrder-1));
                     Auditoriums[selection-1].UnReserveSeats(Integer.parseInt(""+seat.charAt(0))-1, (int)(seat.charAt(1)-65));
                     tempListOfOrders[found]="";
                 }
@@ -697,7 +742,7 @@ public class Main {
                     temp[2]=temp[2].substring(0,selectedOrder-1)+temp[2].substring(selectedOrder);
                     if (temp[1].compareTo("")==0)
                     {
-                        temp= new String[]{null,null,null,null,null,null};
+                        temp= new String[]{users.get(userKey)[0],null,null,null,null,null};
                     }
                     users.put(userKey,temp);
                     for (int i=0; i< temp.length;i++){System.out.println(temp[i]);}
@@ -712,15 +757,8 @@ public class Main {
                 temp[3]=adultString.substring(0,adultString.length()-1);
                 temp[4]=childString.substring(0,childString.length()-1);
                 temp[5]=senriorString.substring(0,senriorString.length()-1);
-                //for (int i=0; i< temp.length;i++){System.out.println(temp[i]);}
+                for (int i=0; i< temp.length;i++){System.out.println(temp[i]);}
                 users.put(userKey,temp);
                 return;
-            case 3:
-                return;
-        }
-    }
-    public static String removeDashes(String s)
-    {
-        return s.replaceAll("-\\w","");
     }
 }
