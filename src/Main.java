@@ -49,7 +49,37 @@ public class Main {
         {
             String userKey = logIn(scnr, users);
             boolean found = false;
-            while (!found)
+            if (userKey.compareTo("admin")==0)
+            {
+                while (!found)
+                {
+                    System.out.println("1. Print Report\n2. Logout\n3. Exit");
+                    int selection = scnr.nextInt();
+                    switch(selection)
+                    {
+                        case 1:
+                            System.out.println("this is a remport");
+                            continue;
+                        case 2:
+                            System.out.println("Logging out");
+                            scnr.nextLine();
+                            break;
+                        case 3:
+                            logout = !logout;
+                            System.out.println("Logging out");
+                            scnr.nextLine();
+                            break;
+                        default:
+                            System.out.println("Incorrect option chosen");
+                            break;
+                    }
+                    found =!found;
+                }
+                
+            }
+            else
+            {
+                while (!found)
             {
                 System.out.println("1. Reserve Seats\n2. View Orders\n3. Update Order\n4. Display Receipt\n5. Log Out");
                 int selection = scnr.nextInt();
@@ -158,16 +188,15 @@ public class Main {
                         System.out.println("Logging out");
                         scnr.nextLine();
                         break;
-                    case 6:
-                        logout=true;
-                        break;
                     default:
                         System.out.println("Incorrect try again");
                         continue;
                 }
                 found = !found;
             }
-        }
+        
+            }
+            }
         System.out.println("Thanks!");
         userScanner.close();
         scnr.close();
