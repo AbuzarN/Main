@@ -13,7 +13,7 @@ public class Main {
         scnr = new Scanner(System.in);//Scanner for user input
         Scanner inFS = null;//Scanner object for file
         String[] fileName = new String[]{"A1.txt","A2.txt","A3.txt"};//file name string
-        System.out.println("Enter File Name");//prompt for file name
+        //System.out.println("Enter File Name");//prompt for file name
         Auditorium[] Auditoriums = new Auditorium[]{null,null,null};
         //System.out.println(fileName);
         for(int i =0; i < 3 ;i++)
@@ -58,7 +58,20 @@ public class Main {
                     switch(selection)
                     {
                         case 1:
-                            System.out.println("this is a remport");
+                            for (int i =0; i<Auditoriums.length;i++)
+                            {
+                                Auditoriums[i].UpdateStats();//update the A1 variables
+                                Auditoriums[i].setTotalTickets(Auditoriums[i].getAdultTickets() + Auditoriums[i].getChildTickets() + Auditoriums[i].getSeniorTickets());//tally the totals seats by adding all the types of seats
+                                Auditoriums[i].setTotalSales(Auditoriums[i].getAdultTickets() * 10 + Auditoriums[i].getChildTickets() * 5 + Auditoriums[i].getSeniorTickets() * 7.5);//add up sales by the formula given
+                                System.out.print("Auditorium "+i+"\nTotal Seats:\t"+ Auditoriums[i].getTotalSeats() +"\nTotal Tickets:\t" + Auditoriums[i].getTotalTickets() +"\nAdult Tickets:\t"+ Auditoriums[i].getAdultTickets() +"\nChild Tickets:\t"+ Auditoriums[i].getChildTickets() +"\nSenior Tickets:\t"+ Auditoriums[i].getSeniorTickets() +"\nTotal Sales:\t$");
+//this behemoth abov            e outputs the summary
+                                System.out.printf("%.2f", Auditoriums[i].getTotalSales());
+                                System.out.println();
+                            }
+                            
+                            //close differnt parts of program
+
+                            
                             continue;
                         case 2:
                             System.out.println("Logging out");
@@ -67,7 +80,43 @@ public class Main {
                         case 3:
                             logout = !logout;
                             System.out.println("Logging out");
-                            scnr.nextLine();
+                            FileOutputStream A1FOS=null;
+                            PrintWriter A1out=null;
+                            for (int i =0; i<Auditoriums.length;i++)
+                            {
+                                
+                                try {
+                                    A1FOS = new FileOutputStream("A"+i+"Final.txt");
+                                } catch (FileNotFoundException e) 
+                                {
+                                    System.out.println("this broke");
+                                }//create object
+                                A1out = new PrintWriter(A1FOS); //create a writer obkect
+                            
+                                //this code runs through all the seats in the auditorium and only prints the '.','A','S'&'C'
+                                Node curNodeR = Auditoriums[i].First;//pointer node to the LL points to rows
+                                while (curNodeR != null)//this goes through the linked list and prints the Ticket type of each node
+                                {
+                                
+                                    Node curNodeC = curNodeR;//pointer node to the LL points to Columns
+                                    while (curNodeC != null)
+                                    {
+                                        A1out.print(""+ curNodeC.getPayload().getTicketType());
+                                        curNodeC = curNodeC.getNext();//increment node
+                                    }
+                                
+                                    //System.out.println("");
+                                    curNodeR = curNodeR.getDown();//increment row
+                                    if (curNodeR!=null||curNodeC!=null)
+                                    {
+                                        A1out.println("");//newline
+                                    }
+                                
+                                }
+                                A1out.close();
+                            }
+
+
                             break;
                         default:
                             System.out.println("Incorrect option chosen");
@@ -91,28 +140,44 @@ public class Main {
                 switch (selection)
                 {
                     case 1:
+                        String t;
                         System.out.println("1. Auditorium 1\n2. Auditorium 2\n3. Auditorium 3");
                         selection = scnr.nextInt();
                         if (users.get(userKey)[1]==null||users.get(userKey)[1].compareTo(", ")==0)
                         {
-                            users.get(userKey)[1]=reserveTicketsString(Auditoriums[selection-1], scnr,users, userKey);
+                            t =reserveTicketsString(Auditoriums[selection-1], scnr,users, userKey);
+                            if(!reserveTicketIsNull(t))
+                            {
+                                users.get(userKey)[1]=t;
+                            }
+                            
                         }
                         else
                         {
-                            users.get(userKey)[1]=users.get(userKey)[1]+"/"+reserveTicketsString(Auditoriums[selection-1], scnr, users, userKey);
+                            t =reserveTicketsString(Auditoriums[selection-1], scnr,users, userKey);
+                            if(!reserveTicketIsNull(t))
+                            {
+                                users.get(userKey)[1]=users.get(userKey)[1]+"/"+t;
+                            }
+                            
                         }
-                        if (users.get(userKey)[2]==null)
+                        if (users.get(userKey)[2]==null && !reserveTicketIsNull(t))
                         {
                             users.get(userKey)[2]=""+selection;
                         }
-                        else
+                        else if (!reserveTicketIsNull(t))
                         {
+
                             users.get(userKey)[2]=users.get(userKey)[2]+selection;
                         }
                         //System.out.println(users.get(userKey)[1]);
                         continue;
                     case 2:
                         //System.out.println("output"+users.get(userKey)[1]);
+                        for (int i =0; i<users.get(userKey).length;i++)
+                        {
+                            System.out.println(users.get(userKey)[i]);
+                        }
                         if (users.get(userKey)[1]==null || users.get(userKey)[1].compareTo("")==0)
                         {
                             System.out.println("No Orders");
@@ -226,47 +291,7 @@ public class Main {
                 boolean inputvalidation = true;//input validation flag
                 if (input.equals("2"))//exit sequence starts
                 {
-                    FileOutputStream A1FOS=null;
-                    try {
-                        A1FOS = new FileOutputStream("output1.txt");
-                    } catch (FileNotFoundException e) 
-                    {
-                        System.out.println("this broke");
-                    }//create object
-                    PrintWriter A1out = new PrintWriter(A1FOS); //create a writer obkect
-
-                    //this code runs through all the seats in the auditorium and only prints the '.','A','S'&'C'
-                    Node curNodeR = A1.First;//pointer node to the LL points to rows
-                    while (curNodeR != null)//this goes through the linked list and prints the Ticket type of each node
-                    {
-
-                        Node curNodeC = curNodeR;//pointer node to the LL points to Columns
-                        while (curNodeC != null)
-                        {
-                            A1out.print(""+ curNodeC.getPayload().getTicketType());
-                            curNodeC = curNodeC.getNext();//increment node
-                        }
-
-                        //System.out.println("");
-                        curNodeR = curNodeR.getDown();//increment row
-                        if (curNodeR!=null||curNodeC!=null)
-                        {
-                            A1out.println("");//newline
-                        }
-
-                    }
-
-                    exit = true;//dont loop again
-
-                    A1.UpdateStats();//update the A1 variables
-                    A1.setTotalTickets(A1.getAdultTickets() + A1.getChildTickets() + A1.getSeniorTickets());//tally the totals seats by adding all the types of seats
-                    A1.setTotalSales(A1.getAdultTickets() * 10 + A1.getChildTickets() * 5 + A1.getSeniorTickets() * 7.5);//add up sales by the formula given
-                    System.out.print("\nTotal Seats:\t"+ A1.getTotalSeats() +"\nTotal Tickets:\t" + A1.getTotalTickets() +"\nAdult Tickets:\t"+ A1.getAdultTickets() +"\nChild Tickets:\t"+ A1.getChildTickets() +"\nSenior Tickets:\t"+ A1.getSeniorTickets() +"\nTotal Sales:\t$");
-//this behemoth above outputs the summary
-                    System.out.printf("%.2f", A1.getTotalSales());
-                    //close differnt parts of program
                     
-                    A1out.close();
                 }
                 else if (input.equals("1"))//main loop
                 {
@@ -527,7 +552,22 @@ public class Main {
                         else if (input.length()==1&&input.charAt(0)=='N')
                         {
                             inputvalidation=false;
-                            break;
+                            System.out.println("seats not reserved");
+                            if (users.get(userKey)[1]==null)
+                            {
+                                //System.out.println("a");
+
+                                String[] s =new String []{users.get(userKey)[0],null,null,null,null,null};
+                                users.put(userKey,s);
+                            }
+                            /* 
+                            else
+                            {
+                                //System.out.println("b");
+                                //flag!!!
+                                users.get(userKey)[2] = users.get(userKey)[2].substring(0,users.get(userKey)[2].length()-1);
+                            }*/
+                            return null;
                         }
                     }
                 }
@@ -536,7 +576,7 @@ public class Main {
                     System.out.println("seats not available");
                 }
             }
-        return "null";
+        return null;
     }
     public static String logIn(Scanner scnr, HashMap<String,String[]> users)
     {
@@ -563,7 +603,7 @@ public class Main {
                     }
                     else
                     {
-                        System.out.println("Wrong password");
+                        System.out.println("Invalid password");
                     }
 
                 }
@@ -587,9 +627,10 @@ public class Main {
         switch(selection)
         {
             case 1:
-                System.out.println("1. Auditorium 1\n2. Auditorium 2\n3. Auditorium 3");
-                selection=Integer.parseInt(""+users.get(userKey)[2].charAt(selection-1));
+                //System.out.println("1. Auditorium 1\n2. Auditorium 2\n3. Auditorium 3");
+                selection=Integer.parseInt(""+users.get(userKey)[2].charAt(selectedOrder-1));
                 //selection = scnr.nextInt();
+                System.out.println(selection);
                 listOfOrders[selectedOrder-1]=listOfOrders[selectedOrder-1]+","+reserveTicketsString(Auditoriums[selection-1], scnr,users, userKey);
                 //System.out.println(listOfOrders[selectedOrder-1]);
                 output ="";
@@ -688,7 +729,9 @@ public class Main {
                 {
                     //System.out.println("selection:"+selection+"\n"+users.get(userKey)[2]+"selectedOrder"+selectedOrder);
                     selection=Integer.parseInt(""+users.get(userKey)[2].charAt(selectedOrder-1));
-                    Auditoriums[selection-1].UnReserveSeats(Integer.parseInt(""+seat.charAt(0))-1, (int)(seat.charAt(1)-65));
+                    String s = Integer.parseInt(""+seat.charAt(0))+""+ (int)(seat.charAt(1)-65);
+                    System.out.println("Unreserving: "+s);
+                    Auditoriums[selection-1].UnReserveSeats(Integer.parseInt(""+seat.charAt(0)), (int)(seat.charAt(1)-65));
                     tempListOfOrders[found]="";
                 }
                 output="";
@@ -801,5 +844,16 @@ public class Main {
                 users.put(userKey,temp);
                 System.out.println("Ticekt removed");
                 return;
+    }
+    public static boolean reserveTicketIsNull(String s)
+    {
+        if (s==null)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }
