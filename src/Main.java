@@ -3,6 +3,7 @@
 //SAN190003
 import java.io.*;
 import java.util.Scanner;
+import java.util.Comparator;
 import java.util.HashMap;
 // Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
 // then press Enter. You can now see whitespace characters in your code.
@@ -194,7 +195,7 @@ public class Main {
                             listofSeniors=users.get(userKey)[5].split("/");
                             for (int i=0; i<users.get(userKey)[2].length();i++)
                             {
-                                System.out.println("Auditorium "+ users.get(userKey)[2].charAt(i)+", "+ listOfOrders[i]+"\n"+listofAdults[i+1]+" adult, "+listofChilds[i+1]+" child, "+listofSeniors[i+1]+" senior");
+                                System.out.println("Auditorium "+ users.get(userKey)[2].charAt(i)+", "+ listOfOrders[i]+"\n"+listofAdults[i+1]+" adult, "+listofChilds[i+1]+" child, "+listofSeniors[i+1]+" senior\n");
                             }
                         }
                         continue;    
@@ -239,13 +240,17 @@ public class Main {
                         listofSeniors=users.get(userKey)[5].split("/");
                         for (int i=0; i<users.get(userKey)[2].length();i++)
                         {
-                            System.out.println("Auditorium "+ users.get(userKey)[2].charAt(i)+", "+ listOfOrders[i]+"\n"+listofAdults[i+1]+" adult, "+listofChilds[i+1]+" child, "+listofSeniors[i+1]+" senior");
+                            System.out.println("Auditorium "+ users.get(userKey)[2].charAt(i)+", "+ listOfOrders[i]+"\n"+listofAdults[i+1]+" adult, "+listofChilds[i+1]+" child, "+listofSeniors[i+1]+" senior\n");
                             orderTotal=Integer.parseInt(listofAdults[i+1])*10.0+Integer.parseInt(listofChilds[i+1])*5.0+Integer.parseInt(listofSeniors[i+1])*7.50;
                             runninTotal+=orderTotal;
-                            System.out.println("Order Total: $"+orderTotal+"\n");
+                            System.out.println("Order Total: $");
+                            System.out.printf("%.2f", orderTotal);
+                            System.out.println();
                             orderTotal=0;
                         }
-                        System.out.println("Customer Total: $"+runninTotal+"\n");
+                        System.out.print("Customer Total: $");
+                        System.out.printf("%.2f", runninTotal);
+                        System.out.println();
                         //hi
                         //System.out.println()
                         continue;
@@ -666,9 +671,11 @@ public class Main {
                 {
                     System.out.println(tempListOfOrders[i]);
                 }
-                System.out.println("Which seat?");
+                System.out.println("Which row?");
                 scnr.nextLine();
                 String seat = scnr.nextLine();
+                System.out.println("Which Seat?");
+                seat += scnr.nextLine();
                 removeseat(listOfOrders, selectedOrder, scnr, selection, Auditoriums, userKey, users, seat);
                 return;
             case 3:
