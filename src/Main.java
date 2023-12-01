@@ -195,7 +195,7 @@ public class Main {
                             listofSeniors=users.get(userKey)[5].split("/");
                             for (int i=0; i<users.get(userKey)[2].length();i++)
                             {
-                                System.out.println("Auditorium "+ users.get(userKey)[2].charAt(i)+", "+ listOfOrders[i]+"\n"+listofAdults[i+1]+" adult, "+listofChilds[i+1]+" child, "+listofSeniors[i+1]+" senior\n");
+                                System.out.println("Auditorium "+ users.get(userKey)[2].charAt(i)+", "+ sortString(listOfOrders[i]) +"\n"+listofAdults[i+1]+" adult, "+listofChilds[i+1]+" child, "+listofSeniors[i+1]+" senior\n");
                             }
                         }
                         continue;    
@@ -240,7 +240,7 @@ public class Main {
                         listofSeniors=users.get(userKey)[5].split("/");
                         for (int i=0; i<users.get(userKey)[2].length();i++)
                         {
-                            System.out.println("Auditorium "+ users.get(userKey)[2].charAt(i)+", "+ listOfOrders[i]+"\n"+listofAdults[i+1]+" adult, "+listofChilds[i+1]+" child, "+listofSeniors[i+1]+" senior\n");
+                            System.out.println("Auditorium "+ users.get(userKey)[2].charAt(i)+", "+ sortString(listOfOrders[i])+"\n"+listofAdults[i+1]+" adult, "+listofChilds[i+1]+" child, "+listofSeniors[i+1]+" senior\n");
                             orderTotal=Integer.parseInt(listofAdults[i+1])*10.0+Integer.parseInt(listofChilds[i+1])*5.0+Integer.parseInt(listofSeniors[i+1])*7.50;
                             runninTotal+=orderTotal;
                             System.out.println("Order Total: $");
@@ -862,5 +862,31 @@ public class Main {
         {
             return false;
         }
+    }
+    public static String sortString(String s)
+    {
+        String[] A =s.split(",");
+        for (int i = 0; i < A.length - 1; i++) {
+            for (int j = 0; j < A.length - i - 1; j++) {
+                // Swap if the element found is greater than the next element
+                if (Integer.parseInt(""+A[j].charAt(0)) > Integer.parseInt(""+A[j + 1].charAt(0))) {
+                    // Swap array[j] and array[j + 1]
+                    String temp = (A[j]);
+                    A[j] = A[j + 1];
+                    A[j + 1] = temp;
+                }
+                else if (Integer.parseInt(""+A[j].charAt(0)) == Integer.parseInt(""+A[j + 1].charAt(0)))
+                {
+                    if (A[j].charAt(1) > A[j + 1].charAt(1)) {
+                    // Swap array[j] and array[j + 1]
+                    String temp = (A[j]);
+                    A[j] = A[j + 1];
+                    A[j + 1] = temp;
+                }
+                }
+            }
+        }
+        s = String.join(",",A);
+        return s;
     }
 }
