@@ -5,6 +5,7 @@ import java.io.*;
 import java.util.Scanner;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.InputMismatchException;
 // Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
 // then press Enter. You can now see whitespace characters in your code.
 public class Main {
@@ -59,16 +60,31 @@ public class Main {
                     switch(selection)
                     {
                         case 1:
+                            double []total = new double []{0,0,0,0,0,0};
                             for (int i =0; i<Auditoriums.length;i++)
                             {
                                 Auditoriums[i].UpdateStats();//update the A1 variables
                                 Auditoriums[i].setTotalTickets(Auditoriums[i].getAdultTickets() + Auditoriums[i].getChildTickets() + Auditoriums[i].getSeniorTickets());//tally the totals seats by adding all the types of seats
                                 Auditoriums[i].setTotalSales(Auditoriums[i].getAdultTickets() * 10 + Auditoriums[i].getChildTickets() * 5 + Auditoriums[i].getSeniorTickets() * 7.5);//add up sales by the formula given
-                                System.out.print("Auditorium "+i+"\nTotal Seats:\t"+ Auditoriums[i].getTotalSeats() +"\nTotal Tickets:\t" + Auditoriums[i].getTotalTickets() +"\nAdult Tickets:\t"+ Auditoriums[i].getAdultTickets() +"\nChild Tickets:\t"+ Auditoriums[i].getChildTickets() +"\nSenior Tickets:\t"+ Auditoriums[i].getSeniorTickets() +"\nTotal Sales:\t$");
+                                System.out.print("Auditorium "+(i+1)+"\t"+ (Auditoriums[i].getTotalSeats()-Auditoriums[i].getTotalTickets()) +"\t" + Auditoriums[i].getTotalTickets() +"\t"+ Auditoriums[i].getAdultTickets() +"\t"+ Auditoriums[i].getChildTickets() +"\t"+ Auditoriums[i].getSeniorTickets() +"\t$");
 //this behemoth abov            e outputs the summary
                                 System.out.printf("%.2f", Auditoriums[i].getTotalSales());
                                 System.out.println();
+                                total[0]+=Auditoriums[i].getTotalSeats()-Auditoriums[i].getTotalTickets();
+                                total[1]+=Auditoriums[i].getTotalTickets();
+                                total[2]+=Auditoriums[i].getAdultTickets();
+                                total[3]+=Auditoriums[i].getChildTickets();
+                                total[4]+=Auditoriums[i].getSeniorTickets();
+                                total[5]+=Auditoriums[i].getTotalSales();
                             }
+                            System.out.print("Total\t");
+                            for (int i =0; i<total.length-1;i++)
+                            {
+                                System.out.print("\t"+(int)total[i]);
+                            }
+                            System.out.print("\t$");
+                            System.out.printf("%.2f", total[5]);
+                            System.out.println();
                             
                             //close differnt parts of program
 
@@ -132,7 +148,16 @@ public class Main {
                 while (!found)
             {
                 System.out.println("1. Reserve Seats\n2. View Orders\n3. Update Order\n4. Display Receipt\n5. Log Out");
-                int selection = scnr.nextInt();
+                int selection=0;
+                try {
+                    selection = scnr.nextInt();
+                }
+                catch (InputMismatchException e)
+                {
+                    selection=0;
+                    scnr.nextLine();
+                };
+                
                 String[] listOfOrders;
                 String[] listofAdults;
                 String[] listofChilds;
@@ -143,7 +168,21 @@ public class Main {
                     case 1:
                         String t;
                         System.out.println("1. Auditorium 1\n2. Auditorium 2\n3. Auditorium 3");
-                        selection = scnr.nextInt();
+                        try 
+                        {
+                            selection = scnr.nextInt();
+                        }
+                        catch (InputMismatchException e)
+                        {
+                            System.out.println("No Auditorium");
+                            scnr.nextLine();
+                            continue;
+                        }
+                        if (selection>3)
+                        {
+                            System.out.println("No Auditorium");
+                            continue;
+                        }
                         if (users.get(userKey)[1]==null||users.get(userKey)[1].compareTo(", ")==0)
                         {
                             t =reserveTicketsString(Auditoriums[selection-1], scnr,users, userKey);
@@ -175,13 +214,10 @@ public class Main {
                         continue;
                     case 2:
                         //System.out.println("output"+users.get(userKey)[1]);
-                        for (int i =0; i<users.get(userKey).length;i++)
-                        {
-                            System.out.println(users.get(userKey)[i]);
-                        }
+                        //for (int i =0; i<users.get(userKey).length;i++){System.out.println(users.get(userKey)[i]);}
                         if (users.get(userKey)[1]==null || users.get(userKey)[1].compareTo("")==0)
                         {
-                            System.out.println("No Orders");
+                            System.out.println("No orders");
                         }
                         else
                         {
@@ -202,7 +238,7 @@ public class Main {
                     case 3:
                         if (users.get(userKey)[1]==null|| users.get(userKey)[1].compareTo("")==0)
                         {
-                            System.out.println("No Orders");
+                            System.out.println("No orders");
                         }
                         else
                         {
@@ -218,11 +254,47 @@ public class Main {
                                 System.out.println("Order "+(i+1)+":");
                                 System.out.println("Auditorium "+ users.get(userKey)[2].charAt(i)+", "+ removeDashes(listOfOrders[i])+"\n"+listofAdults[i+1]+" adult, "+listofChilds[i+1]+" child, "+listofSeniors[i+1]+" senior\n");
                             }
-                            int selectedOrder = scnr.nextInt();
-
-                            System.out.println("1. Add tickets to order\n2. Delete tickets from order\n3. Cancel Order");
-                            selection = scnr.nextInt();
-                            updateOrderSwitch(selection,userKey,users,selectedOrder,Auditoriums,scnr,listOfOrders);
+                            int selectedOrder = 0;
+                            try 
+                            {
+                                selectedOrder = scnr.nextInt();
+                            }
+                            catch (InputMismatchException e)
+                            {
+                                selectedOrder =0;
+                                //System.out.println("Invalid");
+                                scnr.nextLine();
+                            }
+                            System.out.println(users.get(userKey)[2].length());
+                            if (selectedOrder>0&&selectedOrder<=users.get(userKey)[2].length())
+                            {
+                                System.out.println("1. Add tickets to order\n2. Delete tickets from order\n3. Cancel Order");
+                                try 
+                                {
+                                    selection = scnr.nextInt();
+                                }
+                                catch (InputMismatchException e)
+                                {
+                                    selection =0;
+                                    //System.out.println("Invalid");
+                                    scnr.nextLine();
+                                }
+                                //selection = scnr.nextInt();
+                                if (selection>0&& selection<4)
+                                {
+                                    updateOrderSwitch(selection,userKey,users,selectedOrder,Auditoriums,scnr,listOfOrders);
+                                }
+                                else
+                                {
+                                    System.out.println("Incorrect");
+                                }
+                                
+                            }
+                            else
+                            {
+                                System.out.println("No such order");
+                            }
+                            
                         }
                         
                         continue;
@@ -635,7 +707,7 @@ public class Main {
                 //System.out.println("1. Auditorium 1\n2. Auditorium 2\n3. Auditorium 3");
                 selection=Integer.parseInt(""+users.get(userKey)[2].charAt(selectedOrder-1));
                 //selection = scnr.nextInt();
-                System.out.println(selection);
+                //System.out.println(selection);
                 listOfOrders[selectedOrder-1]=listOfOrders[selectedOrder-1]+","+reserveTicketsString(Auditoriums[selection-1], scnr,users, userKey);
                 //System.out.println(listOfOrders[selectedOrder-1]);
                 output ="";
@@ -667,10 +739,7 @@ public class Main {
             case 2:
                 tempListOfOrders = removeDashes(listOfOrders[selectedOrder-1]).split(",");
 
-                for (int i =0; i<tempListOfOrders.length;i++)
-                {
-                    System.out.println(tempListOfOrders[i]);
-                }
+                //for (int i =0; i<tempListOfOrders.length;i++){System.out.println(tempListOfOrders[i]);}
                 System.out.println("Which row?");
                 scnr.nextLine();
                 String seat = scnr.nextLine();
