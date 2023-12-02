@@ -178,7 +178,7 @@ public class Main {
                             scnr.nextLine();
                             continue;
                         }
-                        if (selection>3)
+                        if (selection>3||selection<1)
                         {
                             System.out.println("No Auditorium");
                             continue;
@@ -300,6 +300,11 @@ public class Main {
                         continue;
                         
                     case 4:
+                        if (users.get(userKey)[1]==null|| users.get(userKey)[1].compareTo("")==0)
+                        {
+                            System.out.println("Customer Total: $0.00");
+                            continue;
+                        }
                         double runninTotal=0;
                         double orderTotal=0;
                         listOfOrders=users.get(userKey)[1].split("/");
@@ -805,9 +810,9 @@ public class Main {
                 {
                     //System.out.println("selection:"+selection+"\n"+users.get(userKey)[2]+"selectedOrder"+selectedOrder);
                     selection=Integer.parseInt(""+users.get(userKey)[2].charAt(selectedOrder-1));
-                    String s = Integer.parseInt(""+seat.charAt(0))+""+ (int)(seat.charAt(1)-65);
+                    String s = Integer.parseInt(""+seat.charAt(0))+""+ (seat.charAt(1)-65);
                     System.out.println("Unreserving: "+s);
-                    Auditoriums[selection-1].UnReserveSeats(Integer.parseInt(""+seat.charAt(0)), (int)(seat.charAt(1)-65));
+                    Auditoriums[selection-1].UnReserveSeats(Integer.parseInt(""+seat.charAt(0)), (seat.charAt(1)-65));
                     tempListOfOrders[found]="";
                 }
                 output="";
